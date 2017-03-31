@@ -28,7 +28,7 @@ Examples:
 ## Required
 PHP with php-curl enabled  
 An account on <https://knoxss.me/> logged in  
-The User-Agent of your brower
+The User-Agent of your browser
 <br>
 
 
