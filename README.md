@@ -7,20 +7,21 @@ Usage: php autoknoxss.php [OPTIONS] -c <cookies>
 
 Options:
 	-b	load Burp XML file
-	-c	set cookies
+	-c	set knoxss.me cookies
 	-e	max error before exiting, default=0 (disable)
 	-h	print this help
 	-me	min throttle (microseconds), default=0 (disable)
 	-ma	max throttle (microseconds), default=0 (disable)
 	-p	max process child, default=3
 	-s	test a single url
-	-t	timeout, default=20
+	-t	request timeout, default=20
 	-u	load file containing url list
+	-v	verbosity level, (not implemented yet)
 
 Examples:
-	php autoknoxss.php -c "xxxxx" -s http://10degres.net
-	php autoknoxss.php -c "xxxxx" -b 10d.xml -t 10 -p 5
-	php autoknoxss.php -c "xxxxx" -u 10d.txt -mi 10000 -ma 100000 -e 10
+	php autoknoxss.php -c "sucuri_xxx" -s http://10degres.net
+	php autoknoxss.php -c "sucuri_xxx" -b 10d.xml -t 10 -p 5
+	php autoknoxss.php -c "sucuri_xxx" -u 10d.txt -mi 10000 -ma 100000 -e 10
 ```
 
 I don't believe in license.  

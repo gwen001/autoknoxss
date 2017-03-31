@@ -216,7 +216,7 @@ class AutoKnoxss
 		if( !$this->knoxss->wpnonce ) {
 			Utils::help( 'WPNonce not found' );
 		}
-		echo "WPnonce found: ".$this->knoxss->getWPnonce()."\n";
+		echo "WPnonce extracted: ".$this->knoxss->getWPnonce()."\n";
 
 		$n_request = count( $this->t_requests );
 		echo 'Testing '.$n_request." request...\n\n";
