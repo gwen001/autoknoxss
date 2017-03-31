@@ -19,7 +19,7 @@ Options:
 	-v	verbosity level (not implemented yet)
 
 Examples:
-	php autoknoxss.php -c "sucuri_xxx" -s http://10degres.net
+	php autoknoxss.php -c "sucuri_xxx" -s http://10degres.net/index.html
 	php autoknoxss.php -c "sucuri_xxx" -b 10d.xml -t 10 -p 5
 	php autoknoxss.php -c "sucuri_xxx" -u 10d.txt -mi 10000 -ma 100000 -e 10
 ```
