@@ -23,6 +23,8 @@ abstract class Request
 	public $post = '';
 
 	
+	
+	
 	protected function __construct() {
 	}
 }
