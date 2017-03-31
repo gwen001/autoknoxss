@@ -3,7 +3,7 @@ PHP tool to test Cross Site Scripting aka XSS through KNOXSS.
 Note that this is an automated tool, manual check is still required.  
 
 ```
-Usage: php autoknoxss.php [OPTIONS] -c <cookies>
+Usage: php autoknoxss.php [OPTIONS] -c <cookies> -b|-s|-u <source>
 
 Options:
 	-b	load Burp XML file
@@ -16,7 +16,7 @@ Options:
 	-s	test a single url
 	-t	request timeout, default=20
 	-u	load file containing url list
-	-v	verbosity level, (not implemented yet)
+	-v	verbosity level (not implemented yet)
 
 Examples:
 	php autoknoxss.php -c "sucuri_xxx" -s http://10degres.net
