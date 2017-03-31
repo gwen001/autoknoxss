@@ -26,3 +26,5 @@ Examples:
 
 I don't believe in license.  
 You can do want you want with this program.  
+
+[![ScreenShot](https://raw.githubusercontent.com/gwen001/autoknoxss/master/example.jpg)](https://github.com/gwen001/autoknoxss)<br>
