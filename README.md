@@ -1,4 +1,4 @@
-# AutoKnoss
+# AutoKnoxss
 PHP tool to test Cross Site Scripting aka XSS through KNOXSS.  
 Note that this is an automated tool, manual check is still required.  
 
