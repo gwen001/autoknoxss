@@ -31,7 +31,7 @@ An account on <https://knoxss.me/> logged in
 The User-Agent of your browser  
 
 ## Achtung
-Since knoss.me use Sucuri as a firewall, the script must have the same user-agent and the ip address than the browser you are connected with.  
+Since knoxss.me use Sucuri as a firewall, the script must have the same user-agent and the ip address than the browser you are connected with.  
 <br>
 
 I don't believe in license.  
