@@ -6,7 +6,7 @@ Note that this is an automated tool, manual check is still required.
 Usage: php autoknoxss.php [OPTIONS] -a <user-agent> -c <cookies> -b|-s|-u <source>
 
 Options:
-	-a	set user-agent, yes boring...
+	-a	your browser user-agent, yes boring...
 	-b	load Burp XML file
 	-c	set knoxss.me cookies
 	-e	max error before exiting, default=0 (disable)
@@ -26,8 +26,9 @@ Examples:
 ```
 
 ## Required
-PHP  
-An account on <https://knoxss.me/>  
+PHP with php-curl enabled  
+An account on <https://knoxss.me/> logged in  
+The User-Agent of your brower
 <br>
 
 
