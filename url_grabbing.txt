@@ -1,11 +1,9 @@
 
-
 wget --random-wait -U mozilla -r -l4 --spider -D example.com https://www.example.com/ -o output.txt
 
 
-cat output.txt  | grep http | grep 2017 | awk '{print $3}' | egrep -iv "\.gif|\.jpg|\.jpeg|\.png|\.woff2|\.woff|\.ttf|\.js|\.css|\.mp3|\.mp4|\.mpeg|\.pdf|\.doc|\.txt|\.tar|\.tgz|\.tar\.gz|\.gz|\.zip|\.rar" | sort -fu > urls.txt
+cat output.txt | grep http | grep 2017 | awk '{print $3}' | egrep -iv "\.gif|\.jpg|\.jpeg|\.png|\.woff2|\.woff|\.ttf|\.js|\.css|\.mp3|\.mp4|\.mpeg|\.pdf|\.doc|\.txt|\.tar|\.tgz|\.tar\.gz|\.gz|\.zip|\.rar" | sort -fu > urls.txt
 
 
 php autoknoxss.php -c "sucuricp_xxx" -u urls.txt
-
 
