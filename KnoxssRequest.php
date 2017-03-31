@@ -9,8 +9,8 @@
 class KnoxssRequest
 {
 	const KNOXSS_URL = 'https://knoxss.me/pro';
-	const USER_AGENT = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0';
 	
+	public $user_agent = '';
 	public $timeout = 20;
 	public $cookies = '';
 	public $cookie_file = '';
@@ -31,6 +31,14 @@ class KnoxssRequest
 	}
 
 	
+	public function getUserAgent() {
+		return $this->user_agent;
+	}
+	public function setUserAgent( $v ) {
+		$this->user_agent = trim( $v );
+	}
+
+
 	public function getCookies() {
 		return $this->cookies;
 	}
@@ -70,7 +78,7 @@ class KnoxssRequest
 		curl_setopt( $c, CURLOPT_TIMEOUT, $this->timeout );
 		curl_setopt( $c, CURLOPT_CUSTOMREQUEST, 'POST' );
 		curl_setopt( $c, CURLOPT_FOLLOWLOCATION, true );
-		curl_setopt( $c, CURLOPT_USERAGENT, self::USER_AGENT );
+		curl_setopt( $c, CURLOPT_USERAGENT, $this->user_agent );
 		curl_setopt( $c, CURLOPT_RETURNTRANSFER, true );
 		curl_setopt( $c, CURLOPT_COOKIE, $this->cookies );
 		curl_setopt( $c, CURLOPT_POST, true );
@@ -90,7 +98,7 @@ class KnoxssRequest
 		curl_setopt( $c, CURLOPT_TIMEOUT, $this->timeout );
 		curl_setopt( $c, CURLOPT_CUSTOMREQUEST, 'GET' );
 		curl_setopt( $c, CURLOPT_FOLLOWLOCATION, true );
-		curl_setopt( $c, CURLOPT_USERAGENT, self::USER_AGENT );
+		curl_setopt( $c, CURLOPT_USERAGENT, $this->user_agent );
 		curl_setopt( $c, CURLOPT_RETURNTRANSFER, true );
 		//curl_setopt( $c, CURLOPT_COOKIE, $this->cookies );
 		curl_setopt( $c, CURLOPT_COOKIEJAR, $this->cookie_file );
@@ -115,22 +123,23 @@ class KnoxssRequest
 		curl_setopt( $c, CURLOPT_TIMEOUT, $this->timeout );
 		curl_setopt( $c, CURLOPT_CUSTOMREQUEST, 'GET' );
 		curl_setopt( $c, CURLOPT_FOLLOWLOCATION, true );
-		curl_setopt( $c, CURLOPT_USERAGENT, self::USER_AGENT );
+		curl_setopt( $c, CURLOPT_USERAGENT, $this->user_agent );
 		curl_setopt( $c, CURLOPT_RETURNTRANSFER, true );
 		curl_setopt( $c, CURLOPT_COOKIE, $this->cookies );
 		//curl_setopt( $c, CURLOPT_COOKIEJAR, $this->cookie_file );
 		//curl_setopt( $c, CURLOPT_COOKIEFILE, $this->cookie_file );
 		$result = curl_exec( $c );
-		//var_dump($result);
-		
+		//var_dump( $result );
+
 		$m = preg_match( '#<input type="hidden" name="_wpnonce" value="(.*)">#', $result, $matches );
+		
 		//var_dump( $matches );
 		if( !$m ) {
 			$this->wpnonce = false;
 		} else {
 			$this->wpnonce = $matches[1];
 		}
-		
+
 		return $this->wpnonce;
 	}
 	

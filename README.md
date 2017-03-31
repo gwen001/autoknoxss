@@ -3,9 +3,10 @@ PHP tool to test Cross Site Scripting aka XSS through KNOXSS.
 Note that this is an automated tool, manual check is still required.  
 
 ```
-Usage: php autoknoxss.php [OPTIONS] -c <cookies> -b|-s|-u <source>
+Usage: php autoknoxss.php [OPTIONS] -a <user-agent> -c <cookies> -b|-s|-u <source>
 
 Options:
+	-a	set user-agent, yes boring...
 	-b	load Burp XML file
 	-c	set knoxss.me cookies
 	-e	max error before exiting, default=0 (disable)

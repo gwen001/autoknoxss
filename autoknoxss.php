@@ -20,6 +20,11 @@ function __autoload( $c ) {
 
 	for ($i = 1; $i <= $argc; $i++) {
 		switch ($_SERVER['argv'][$i]) {
+			case '-a':
+				$autoknoxss->setUserAgent($_SERVER['argv'][$i + 1]);
+				$i++;
+				break;
+
 			case '-b':
 				$autoknoxss->setBurpSource($_SERVER['argv'][$i + 1]);
 				$i++;
@@ -85,6 +90,9 @@ function __autoload( $c ) {
 	}
 	if( !$autoknoxss->getCookies() ) {
 		Utils::help( 'Cookies not found' );
+	}
+	if( !$autoknoxss->getUserAgent() ) {
+		Utils::help( 'User-Agent not found' );
 	}
 }
 // ---

@@ -8,6 +8,7 @@
 
 class AutoKnoxss
 {
+	private $user_agent;
 	private $burp_source;
 	private $url_source;
 	private $max_error = 0;
@@ -25,6 +26,14 @@ class AutoKnoxss
 	private $t_signal_queue = [];
 
 	private $t_requests = [];
+
+	
+	public function getUserAgent() {
+		return $this->user_agent;
+	}
+	public function setUserAgent( $v ) {
+		$this->user_agent = trim( $v );
+	}
 
 	
 	public function getBurpSource() {
@@ -210,6 +219,7 @@ class AutoKnoxss
 	{
 		$this->knoxss = new KnoxssRequest();
 		$this->knoxss->setCookies( $this->cookies );
+		$this->knoxss->setUserAgent( $this->user_agent );
 		//$knoxss->getCookies();
 		//exit();
 		$this->knoxss->getNonce();
