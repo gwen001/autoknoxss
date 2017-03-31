@@ -154,7 +154,7 @@ class KnoxssRequest
 			return 1;
 		}
 		
-		$r = preg_match( "#<script>window.open\('(.*)', '', 'top=380, left=870, width=400, height=250'\);</script>#", $this->result, $matches );
+		$r = preg_match( "#<script>window.open\('(.*)', '', 'top=380, left=870, width=400, height=250'\);</script>#i", $this->result, $matches );
 		//var_dump( $matches );
 		if( $r ) {
 			Utils::_print( 'XSS found: ', 'red' );
@@ -162,13 +162,13 @@ class KnoxssRequest
 			return 0;
 		}
 
-		$r = preg_match( "#No XSS found by KNOXSS#", $this->result );
+		$r = preg_match( "#No XSS found by KNOXSS#i", $this->result );
 		if( $r ) {
 			Utils::_println( 'Looks safe.', 'green' );
 			return 0;
 		}
 
-		$r = preg_match( "#network issues#", $this->result );
+		$r = preg_match( "#network issues#i", $this->result );
 		if( $r ) {
 			Utils::_println( 'Cannot contact target!', 'orange' );
 			return 1;
