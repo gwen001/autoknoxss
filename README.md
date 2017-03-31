@@ -24,6 +24,11 @@ Examples:
 	php autoknoxss.php -c "sucuri_xxx" -u 10d.txt -mi 10000 -ma 100000 -e 10
 ```
 
+## Required
+PHP
+An account on <https://knoxss.me/>
+
+
 I don't believe in license.  
 You can do want you want with this program.  
 
