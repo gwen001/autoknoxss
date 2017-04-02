@@ -236,7 +236,7 @@ class AutoKnoxss
 		//exit();
 		$this->knoxss->getNonce();
 		if( !$this->knoxss->wpnonce ) {
-			//Utils::help( 'WPNonce not found' );
+			Utils::help( 'WPNonce not found' );
 		}
 		echo "WPnonce extracted: ".$this->knoxss->getWPnonce()."\n";
 

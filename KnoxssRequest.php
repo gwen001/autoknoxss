@@ -188,14 +188,13 @@ class KnoxssRequest
 		$r = preg_match( "#<script>window.open\('(.*)', '', 'top=380, left=870, width=400, height=250'\);</script>#i", $this->result, $matches );
 		//var_dump( $matches );
 		if( $r ) {
-			$this->_print( 'XSS found: ', 2, 'red' );
-			$this->_println( $matches[1] );
+			$this->_println( "XSS found: \033[1;37m".$matches[1]."\033[0m", 2, 'red' );
 			return 0;
 		}
 
 		$r = preg_match( "#No XSS found by KNOXSS#i", $this->result );
 		if( $r ) {
-			$this->_println( 'Looks safe.', 0, 'green' );
+			$this->_println( 'Looks safe.', 0, 'light_green' );
 			return 0;
 		}
 
