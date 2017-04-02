@@ -70,6 +70,10 @@ class UrlRequest extends Request
 	
 	public static function loadDatas( $source )
 	{
+		if( !is_file($source) ) {
+			return false;
+		}
+		
 		$t_datas = [];
 		$tmp = file( $source, FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES );
 		

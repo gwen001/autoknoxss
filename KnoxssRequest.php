@@ -10,6 +10,10 @@ class KnoxssRequest
 {
 	const KNOXSS_URL = 'https://knoxss.me/pro';
 	
+	public $verbosity = 0;
+	public $child_id = 0;
+	public $request_id = 0;
+
 	public $user_agent = '';
 	public $timeout = 20;
 	public $cookies = '';
@@ -28,6 +32,33 @@ class KnoxssRequest
 	public function __construct()
 	{
 		$this->cookie_file = tempnam( '/tmp', 'cook_' );
+	}
+
+	
+	public function getChildId() {
+		return $this->child_id;
+	}
+	public function setChildId( $v ) {
+		$this->child_id = (int)$v;
+		return true;
+	}
+
+	
+	public function getRequestId() {
+		return $this->request_id;
+	}
+	public function setRequestId( $v ) {
+		$this->request_id = (int)$v;
+		return true;
+	}
+
+	
+	public function getVerbosity() {
+		return $this->verbosity;
+	}
+	public function setVerbosity( $v ) {
+		$this->verbosity = (int)$v;
+		return true;
 	}
 
 	
@@ -65,13 +96,13 @@ class KnoxssRequest
 	
 	public function go()
 	{
-		echo 'Testing: '.$this->target."\n";
+		$this->_println( 'Testing: '.$this->target, 0 );
 		$this->target = str_replace( '&', '%26', $this->target );
 		$post = 'target='.$this->_urlencode($this->target).'&_wpnonce='.$this->wpnonce.'&addon='.$this->addon.'&auth='.$this->auth;
 		if( strlen($this->post) ) {
 			$post .= '&post='.$this->_urlencode($this->post);
 		}
-		echo 'With post: '.$post."\n";
+		$this->_println( 'With post: '.$post, 0 );
 		
 		$c = curl_init();
 		curl_setopt( $c, CURLOPT_URL, self::KNOXSS_URL );
@@ -150,33 +181,47 @@ class KnoxssRequest
 		//var_dump( $this->result );
 		
 		if( $this->result_code != 200 ) {
-			Utils::_println( "Error contacting KNOXSS! (".$this->result_code.")", 'yellow' );
+			$this->_println( "Error contacting KNOXSS! (".$this->result_code.")", 1, 'yellow' );
 			return 1;
 		}
 		
 		$r = preg_match( "#<script>window.open\('(.*)', '', 'top=380, left=870, width=400, height=250'\);</script>#i", $this->result, $matches );
 		//var_dump( $matches );
 		if( $r ) {
-			Utils::_print( 'XSS found: ', 'red' );
-			echo $matches[1]."\n";
+			$this->_print( 'XSS found: ', 2, 'red' );
+			$this->_println( $matches[1] );
 			return 0;
 		}
 
 		$r = preg_match( "#No XSS found by KNOXSS#i", $this->result );
 		if( $r ) {
-			Utils::_println( 'Looks safe.', 'green' );
+			$this->_println( 'Looks safe.', 0, 'green' );
 			return 0;
 		}
 
 		$r = preg_match( "#network issues#i", $this->result );
 		if( $r ) {
-			Utils::_println( 'Cannot contact target!', 'orange' );
+			$this->_println( 'Cannot contact target!', 1, 'orange' );
 			return 1;
 		}
 		
-		Utils::_println( 'Cannot interpret result!', 'light_purple' );
+		$this->_println( 'Cannot interpret result!', 1, 'light_purple' );
 		return 1;
-		
-		return $r;
+	}
+
+	
+	private function _print( $txt, $lvl, $color='white' )
+	{
+		if( $lvl >= $this->verbosity ) {
+			$txt = '['.$this->child_id.'.'.$this->request_id.'] ' . $txt;
+			Utils::_print( $txt, $color );
+		}
+	}
+	private function _println( $txt, $lvl, $color='white' )
+	{
+		$this->_print( $txt, $lvl, $color );
+		if( $lvl >= $this->verbosity ) {
+			echo "\n";
+		}
 	}
 }

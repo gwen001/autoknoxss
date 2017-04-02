@@ -86,7 +86,7 @@ function __autoload( $c ) {
 	}
 
 	if( !$autoknoxss->getBurpSource() && !$autoknoxss->getUrlSource() && !$autoknoxss->getSingleSource() ) {
-		Utils::help( 'Source/Url not found' );
+		Utils::help( 'Source/Url not found, nothing to test' );
 	}
 	if( !$autoknoxss->getCookies() ) {
 		Utils::help( 'Cookies not found' );

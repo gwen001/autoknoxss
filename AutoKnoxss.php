@@ -40,7 +40,12 @@ class AutoKnoxss
 		return $this->burp_source;
 	}
 	public function setBurpSource( $v ) {
-		$this->burp_source = $v;
+		$f = trim( $v );
+		if( !is_file($f) ) {
+			return false;
+		}
+		$this->burp_source = $f;
+		return true;
 	}
 
 	
@@ -112,12 +117,10 @@ class AutoKnoxss
 	}
 	public function setUrlSource( $v ) {
 		$f = trim( $v );
-		if( is_file($f) ) {
-			$this->url_source = $f;
-			return true;
-		} else {
+		if( !is_file($f) ) {
 			return false;
 		}
+		$this->url_source = $f;
 		return true;
 	}
 
@@ -171,6 +174,10 @@ class AutoKnoxss
 	private function loadBurp()
 	{
 		$this->t_requests = BurpRequest::loadDatas( $this->burp_source );
+		if( !$this->t_requests ) {
+			Utils::help( 'File source is not XML, not loaded' );
+		}
+		echo 'XML loaded: '.$this->burp_source."\n";
 		return count( $this->t_requests );
 	}
 	
@@ -178,6 +185,10 @@ class AutoKnoxss
 	private function loadUrls()
 	{
 		$this->t_requests = UrlRequest::loadDatas( $this->url_source );
+		if( !$this->t_requests ) {
+			Utils::help( 'File source not loaded' );
+		}
+		echo 'Urls loaded: '.$this->url_source."\n";
 		return count( $this->t_requests );
 	}
 
@@ -188,7 +199,7 @@ class AutoKnoxss
 		return count( $this->t_requests );
 	}
 	
-	
+
 	public function loadDatas()
 	{
 		if( $this->burp_source ) {
@@ -218,13 +229,14 @@ class AutoKnoxss
 	public function init()
 	{
 		$this->knoxss = new KnoxssRequest();
+		$this->knoxss->setVerbosity( $this->verbosity );
 		$this->knoxss->setCookies( $this->cookies );
 		$this->knoxss->setUserAgent( $this->user_agent );
 		//$knoxss->getCookies();
 		//exit();
 		$this->knoxss->getNonce();
 		if( !$this->knoxss->wpnonce ) {
-			Utils::help( 'WPNonce not found' );
+			//Utils::help( 'WPNonce not found' );
 		}
 		echo "WPnonce extracted: ".$this->knoxss->getWPnonce()."\n";
 
@@ -278,7 +290,9 @@ class AutoKnoxss
 						$this->knoxss->post = $r->post;
 						
 						ob_start();
-						echo $child_id.'.'.$i.'. ';
+						//echo $child_id.'.'.$i.'. ';
+						$this->knoxss->setChildId( $child_id );
+						$this->knoxss->setRequestId( $i );
 						$this->knoxss->go();
 						$error = $this->knoxss->result();
 						$buffer = ob_get_contents();
@@ -292,7 +306,7 @@ class AutoKnoxss
 						}
 						if( $this->max_error > 0 && $n_error >= $this->max_error ) {
 							echo "\n";
-							Utils::_println( "Too many errors, contact the vendor or try later! (".$child_id.")", 'light_cyan' );
+							Utils::_println( '['.$child_id.'] Too many errors, contact the vendor or try later!', 'light_cyan' );
 							break;
 						}
 						

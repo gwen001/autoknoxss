@@ -139,11 +139,14 @@ class BurpRequest extends Request
 	
 	public static function loadDatas( $source )
 	{
+		if( !is_file($source) ) {
+			return false;
+		}
+		
 		$xml = simplexml_load_file( $source );
 		if( $xml === false ) {
-			Utils::help( 'File source is not XML' );
+			return false;
 		}
-		echo 'XML loaded: '.$source."\n";
 		
 		$t_datas = [];
 		
