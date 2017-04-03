@@ -39,7 +39,17 @@ Since knoxss.me use Sucuri as a firewall, the script must have the same user-age
 Else the program will not be able to find the WPnonce which is required for the next request.  
 <br>
 
-I don't believe in license.  
-You can do want you want with this program.  
+## All-in-one
+Automate the automation.
+This script will try to get urls from a domain using wget and send them all to KNOXSS.  
+Since it has been coded very quickly, there is no option, you have to change user-agent and cookies in the code.  
+
+Usage: php allinone.php <url> <wpnonce>  
+Example: php allinone.php http://10degres.net c3uhce78  
+
 
 [![ScreenShot](https://raw.githubusercontent.com/gwen001/autoknoxss/master/example.jpg)](https://github.com/gwen001/autoknoxss)<br>
+
+
+I don't believe in license.  
+You can do want you want with this program.  

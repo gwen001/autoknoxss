@@ -152,7 +152,7 @@ for( $pointer=0,$n_try=0 ; 1 ; )
 	{
 		$b64 = base64_encode( $t_urls[$pointer] );
 		if( in_array($b64,$t_history) ) {
-			echo "Url ".$pointer." already tested, skipping\n";
+			echo "Url ".$pointer." already tested, skipping!\n";
 			$pointer++;
 			continue;
 		}
