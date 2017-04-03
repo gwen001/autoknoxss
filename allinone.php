@@ -190,13 +190,12 @@ function print_result( $url, $output )
 	//var_dump( $output );
 	echo $url."\n";
 	
-	if( preg_match('#safe#i',$output) ) {
-		Utils::_println( "Looks safe!", 'light_green' );
-	} elseif( preg_match('#XSS found#i',$output) ) {
-		echo $output."\n";
-		Utils::_println( "XSS found!", 'red' );
-	} elseif( preg_match('#Error#i',$output) ) {
-		Utils::_println( "Error!", 'yellow' );
+	if( preg_match('#(.*safe.*)#i',$output,$m) ) {
+		echo trim($m[0])."\n";
+	} elseif( preg_match('#(.*XSS found.*)#i',$output,$m) ) {
+		echo trim($m[0])."\n";
+	} elseif( preg_match('#(.*Error.*)#i',$output,$m) ) {
+		echo trim($m[0])."\n";
 	}
 }
 
