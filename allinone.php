@@ -95,6 +95,7 @@ $nonce = trim( $_SERVER['argv'][2] );
 $depth = 4;
 $max_try = 20;
 $sleep = 1000000;
+$t_history = [];
 $user_agent = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0';
 $cookies = 'sucuri_cloudproxy_uuid_0e44946ca=8df185e993128359375b85885d60e83a; sucuricp_tfca_6e453141ae697f9f78b18427b4c54df1=1; wordpress_test_cookie=WP+Cookie+check; wordpress_logged_in_93e97594f67a8a0ba4e55501e74ea8a6=gwen%7C1491366375%7CBE9qDxctDan32mhOPuCdPwVEsfBGrZzH3tc6nU1PcjF%7C12556167bbdc99a6f5bc4531d50bdc7c664f1ccd1d2bec4f64729343f90e672d';
 
@@ -149,6 +150,14 @@ for( $pointer=0,$n_try=0 ; 1 ; )
 	//for( ; $pointer<$n_urls ; )
 	for( ; $pointer<$n_urls && $f_n_child<$f_max_child ; )
 	{
+		$b64 = base64_encode( $t_urls[$pointer] );
+		if( in_array($b64,$t_history) ) {
+			echo "Url ".$pointer." already tested, skipping\n";
+			$pointer++;
+			continue;
+		}
+		//var_dump($t_history);
+		
 		//if( $f_n_child < $f_max_child )
 		{
 			$pid = pcntl_fork();
@@ -164,6 +173,7 @@ for( $pointer=0,$n_try=0 ; 1 ; )
 		        	signal_handler( SIGCHLD, $pid, $f_t_signal_queue[$pid] );
 		        	unset( $f_t_signal_queue[$pid] );
 		        }
+				$t_history[] = $b64;
 			} else {
 				// child process
 				echo "Call autoknoxss for url ".$pointer."\n";
