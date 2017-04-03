@@ -166,8 +166,7 @@ for( $pointer=0,$n_try=0 ; 1 ; )
 		        }
 			} else {
 				// child process
-				// call autoknoxss here
-				echo "Call autoknoxss here for url ".$pointer."\n";
+				echo "Call autoknoxss for url ".$pointer."\n";
 				$ak = 'php autoknoxss.php -a "'.$user_agent.'" -c "'.$cookies.'" -n "'.$nonce.'" -s "'.$t_urls[$pointer].'"';
 				//echo $ak."\n";
 				//sleep(3);
