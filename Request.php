@@ -14,6 +14,7 @@ abstract class Request
 		'js', 'css',
 		'mp3', 'mp4', 'mpeg',
 		'pdf', 'doc', 'txt',
+		'xml', 'sql',
 		'tar', 'tgz', 'tar.gz', 'gz', 'zip', 'rar',
 	];
 		

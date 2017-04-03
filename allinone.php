@@ -62,20 +62,21 @@ function background( $cmd )
 		pclose( popen("start /B ". $cmd, 'r') );
 	}
 	else {
-		exec( $cmd . " > /dev/null &" );
+		//exec( $cmd . " > /dev/null &" );
+		exec( $cmd . " &" );
 	}
 } 
 
 
 function usage( $err=null ) {
-  echo 'Usage: '.$_SERVER['argv'][0]." <url> <nonce>\n";
+  echo 'Usage: '.$_SERVER['argv'][0]." <url> <nonce> [wget (default)|google]\n";
   if( $err ) {
     echo 'Error: '.$err."\n";
   }
   exit();
 }
 
-if( $_SERVER['argc'] != 3 ) {
+if( $_SERVER['argc'] < 3 || $_SERVER['argc'] > 4 ) {
   usage();
 }
 
@@ -83,37 +84,46 @@ if( $_SERVER['argc'] != 3 ) {
 require( dirname(__FILE__).'/Utils.php' );
 
 
+$url = trim( $_SERVER['argv'][1] );
+$nonce = trim( $_SERVER['argv'][2] );
+$teknik = ($_SERVER['argc']==4) ? $_SERVER['argv'][3] : 'wget';
+
 $f_n_child = 0;
 $f_max_child = 5;
 $f_sleep = 50000;
 $f_t_process = [];
 $f_t_signal_queue = [];
 
-$url = trim( $_SERVER['argv'][1] );
-$nonce = trim( $_SERVER['argv'][2] );
-
 $depth = 4;
 $max_try = 20;
 $sleep = 1000000;
 $t_history = [];
-$user_agent = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0';
-$cookies = 'sucuri_cloudproxy_uuid_0e44946ca=8df185e993128359375b85885d60e83a; sucuricp_tfca_6e453141ae697f9f78b18427b4c54df1=1; wordpress_test_cookie=WP+Cookie+check; wordpress_logged_in_93e97594f67a8a0ba4e55501e74ea8a6=gwen%7C1491366375%7CBE9qDxctDan32mhOPuCdPwVEsfBGrZzH3tc6nU1PcjF%7C12556167bbdc99a6f5bc4531d50bdc7c664f1ccd1d2bec4f64729343f90e672d';
 
+$user_agent = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0';
+$cookies = 'sucuri_cloudproxy_uuid_0e44946ca=8df185e993128359375b85885d60e83a; sucuricp_tfca_6e453141ae697f9f78b18427b4c54df1=1; wordpress_test_cookie=WP+Cookie+check; wordpress_logged_in_93e97594f67a8a0ba4e55501e74ea8a6=gwen%7C1491396882%7Cy1IajoECAA0N7XyShTKWqPljqJV5RmxDwLL5EdVPTzX%7C62671a8fc6219c235ad981ed4cb7e67de19e038954bc18135d1cb1b338e668f2';
+
+
+$output_file = tempnam( '/tmp', 'xss_' );
+//var_dump( $output_file );
 $parse_url = parse_url( $url );
 //var_dump( $parse_url );
 $domain = extractDomain( $parse_url['host'] );
 //var_dump( $domain );
 
-$wget_output = tempnam( '/tmp', 'xss_' );
-echo "Grabbing page from ".$parse_url['host']." using wget (".$wget_output.")...\n\n";
-$wget = 'wget --random-wait -U "'.$user_agent.'" -r -l'.$depth.' --spider -D '.$parse_url['host'].' '.$url.'  -o '.$wget_output;
-//echo $wget."\n";
-background( $wget );
-// killall wget
 
-$extract = 'cat '.$wget_output.' | grep http | grep 2017 | awk \'{print $3}\' | egrep -iv "\.svg|\.ico|\.gif|\.jpg|\.jpeg|\.png|\.woff2|\.woff|\.ttf|\.js|\.css|\.mp3|\.mp4|\.mpeg|\.pdf|\.doc|\.txt|\.tar|\.tgz|\.tar\.gz|\.gz|\.zip|\.rar" | egrep "http[s]?://"';
-//$wget_output = 'urls.txt';
-//$extract = 'cat '.$wget_output;
+if( $teknik == 'google' ) {
+	$get_cmd = 'php ggrabber.php "site:'.$parse_url['host'].' inurl:&" > '.$output_file;
+	$extract_cmd = 'cat '.$output_file.' | egrep "http[s]?://" | grep -iv calling';
+} else {
+	$get_cmd = 'wget --random-wait -U "'.$user_agent.'" -r -l'.$depth.' --spider -D '.$parse_url['host'].' '.$url.'  -o '.$output_file.' > /dev/null';
+	$extract_cmd = 'cat '.$output_file.' | grep http | grep 2017 | awk \'{print $3}\' | egrep -iv "\.svg|\.ico|\.gif|\.jpg|\.jpeg|\.png|\.woff2|\.woff|\.ttf|\.js|\.css|\.mp3|\.mp4|\.mpeg|\.pdf|\.doc|\.xml|\.sql|\.txt|\.tar|\.tgz|\.tar\.gz|\.gz|\.zip|\.rar" | egrep "http[s]?://"';
+}
+//echo $get_cmd."\n";
+//echo $extract_cmd."\n";
+
+echo "Grabbing urls from ".$parse_url['host']." using ".$teknik." (".$output_file.")...\n\n";
+background( $get_cmd );
+// killall wget
 
 posix_setsid();
 declare( ticks=1 );
@@ -127,7 +137,7 @@ for( $pointer=0,$n_try=0 ; 1 ; )
 	
 	// check file for new entries
 	$t_urls = [];
-	exec( $extract, $t_urls );
+	exec( $extract_cmd, $t_urls );
 	//var_dump( $t_urls );
 	
 	$n_urls = count( $t_urls );
