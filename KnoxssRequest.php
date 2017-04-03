@@ -31,7 +31,7 @@ class KnoxssRequest
 	
 	public function __construct()
 	{
-		$this->cookie_file = tempnam( '/tmp', 'cook_' );
+		//$this->cookie_file = tempnam( '/tmp', 'cook_' );
 	}
 
 	
@@ -87,6 +87,14 @@ class KnoxssRequest
 		return true;
 	}
 	
+	public function getTimeout() {
+		return $this->timeout;
+	}
+	public function setTimeout( $v ) {
+		$this->timeout = (int)$v;
+		return true;
+	}
+
 	
 	public function _urlencode( $str )
 	{
@@ -147,7 +155,7 @@ class KnoxssRequest
 	}
 	*/
 	
-	public function getNonce()
+	public function extractNonce()
 	{
 		$c = curl_init();
 		curl_setopt( $c, CURLOPT_URL, self::KNOXSS_URL );
@@ -181,7 +189,7 @@ class KnoxssRequest
 		//var_dump( $this->result );
 		
 		if( $this->result_code != 200 ) {
-			$this->_println( "Error contacting KNOXSS! (".$this->result_code.")", 1, 'yellow' );
+			$this->_println( "Error: cannot contact KNOXSS! (".$this->result_code.")", 1, 'yellow' );
 			return 1;
 		}
 		
@@ -200,11 +208,11 @@ class KnoxssRequest
 
 		$r = preg_match( "#network issues#i", $this->result );
 		if( $r ) {
-			$this->_println( 'Cannot contact target!', 1, 'orange' );
+			$this->_println( 'Error: cannot contact target!', 1, 'orange' );
 			return 1;
 		}
 		
-		$this->_println( 'Cannot interpret result!', 1, 'light_purple' );
+		$this->_println( 'Error: cannot interpret result!', 1, 'light_purple' );
 		return 1;
 	}
 

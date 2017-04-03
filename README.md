@@ -13,6 +13,7 @@ Options:
 	-h	print this help
 	-mi	min throttle (microseconds), default=0 (disable)
 	-ma	max throttle (microseconds), default=0 (disable)
+	-n	force none, useless
 	-p	max process child, default=3
 	-s	test a single url
 	-t	request timeout, default=20

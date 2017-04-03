@@ -8,16 +8,13 @@
 
 class AutoKnoxss
 {
-	private $user_agent;
+	private $knoxss = null;
+
 	private $burp_source;
 	private $url_source;
 	private $max_error = 0;
 	private $max_throttle = 0;
 	private $min_throttle = 0;
-	private $timeout = 20;
-	private $verbosity = 0;
-	
-	private $knoxss = null;
 	
 	private $n_child = 0;
 	private $max_child = 3;
@@ -28,11 +25,44 @@ class AutoKnoxss
 	private $t_requests = [];
 
 	
+	public function __construct() {
+		$this->knoxss = new KnoxssRequest();
+	}
+	
+	
 	public function getUserAgent() {
-		return $this->user_agent;
+		return $this->knoxss->getUserAgent();
 	}
 	public function setUserAgent( $v ) {
-		$this->user_agent = trim( $v );
+		return $this->knoxss->setUserAgent( trim($v) );
+	}
+
+	public function getCookies() {
+		return $this->knoxss->getCookies();
+	}
+	public function setCookies( $v ) {
+		return $this->knoxss->setCookies( trim($v) );
+	}
+	
+	public function getVerbosity() {
+		return $this->knoxss->getVerbosity();
+	}
+	public function setVerbosity( $v ) {
+		return $this->knoxss->setVerbosity( (int)$v );
+	}
+	
+	public function getTimeout() {
+		return $this->knoxss->geTimeout();
+	}
+	public function setTimeout( $v ) {
+		return $this->knoxss->seTimeout( (int)$v );
+	}
+
+	public function getWPnonce() {
+		return $this->knoxss->WPnonce();
+	}
+	public function setWPnonce( $v ) {
+		return $this->knoxss->setWPnonce( trim($v) );
 	}
 
 	
@@ -48,15 +78,6 @@ class AutoKnoxss
 		return true;
 	}
 
-	
-	public function getCookies() {
-		return $this->cookies;
-	}
-	public function setCookies( $v ) {
-		$this->cookies = trim( $v );
-		return true;
-	}
-	
 	
 	public function getMaxError() {
 		return $this->max_error;
@@ -103,15 +124,6 @@ class AutoKnoxss
 	}
 	
 	
-	public function getTimeout() {
-		return $this->timeout;
-	}
-	public function setTimeout( $v ) {
-		$this->timeout = (int)$v;
-		return true;
-	}
-
-	
 	public function getUrlSource() {
 		return $this->url_source;
 	}
@@ -125,21 +137,10 @@ class AutoKnoxss
 	}
 
 	
-	public function getVerbosity() {
-		return $this->verbosity;
-	}
-	public function setVerbosity( $v ) {
-		$this->verbosity = (int)$v;
-		return true;
-	}
-
-	
 	// http://stackoverflow.com/questions/16238510/pcntl-fork-results-in-defunct-parent-process
 	// Thousand Thanks!
 	private function signal_handler( $signal, $pid=null, $status=null )
 	{
-		global $t_process, $t_signal_queue, $n_child;
-				
 		// If no pid is provided, Let's wait to figure out which child process ended
 		if( !$pid ){
 			$pid = pcntl_waitpid( -1, $status, WNOHANG );
@@ -228,13 +229,9 @@ class AutoKnoxss
 	
 	public function init()
 	{
-		$this->knoxss = new KnoxssRequest();
-		$this->knoxss->setVerbosity( $this->verbosity );
-		$this->knoxss->setCookies( $this->cookies );
-		$this->knoxss->setUserAgent( $this->user_agent );
-		//$knoxss->getCookies();
-		//exit();
-		$this->knoxss->getNonce();
+		if( !$this->knoxss->wpnonce ) {
+			$this->knoxss->extractNonce();
+		}
 		if( !$this->knoxss->wpnonce ) {
 			Utils::help( 'WPNonce not found' );
 		}
@@ -254,6 +251,10 @@ class AutoKnoxss
 			echo 'Process '.($k+1).' will treat '.count($tbr)." requests\n";
 		}
 		echo "\n";
+		
+		//posix_setsid();
+		//declare( ticks=1 );
+		//pcntl_signal( SIGCHLD, [$this,'signal_handler'] );
 	}
 	
 	

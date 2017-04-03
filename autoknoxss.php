@@ -55,6 +55,11 @@ function __autoload( $c ) {
 				$i++;
 				break;
 
+			case '-n':
+				$autoknoxss->setWPnonce($_SERVER['argv'][$i + 1]);
+				$i++;
+				break;
+
 			case '-p':
 				$autoknoxss->setMaxChild($_SERVER['argv'][$i + 1]);
 				$i++;
@@ -108,5 +113,3 @@ function __autoload( $c ) {
 
 
 exit();
-
-?>
