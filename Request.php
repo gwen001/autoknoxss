@@ -9,7 +9,7 @@
 abstract class Request
 {
 	const EXCLUDE_EXT = [
-		'ico', 'gif', 'jpg', 'jpeg', 'png',
+		'ico', 'gif', 'jpg', 'jpeg', 'png', 'svg',
 		'woff2', 'woff', 'ttf',
 		'js', 'css',
 		'mp3', 'mp4', 'mpeg',

@@ -93,7 +93,7 @@ $url = trim( $_SERVER['argv'][1] );
 $nonce = trim( $_SERVER['argv'][2] );
 
 $depth = 4;
-$max_try = 100;
+$max_try = 20;
 $sleep = 1000000;
 $user_agent = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0';
 $cookies = 'sucuri_cloudproxy_uuid_0e44946ca=8df185e993128359375b85885d60e83a; sucuricp_tfca_6e453141ae697f9f78b18427b4c54df1=1; wordpress_test_cookie=WP+Cookie+check; wordpress_logged_in_93e97594f67a8a0ba4e55501e74ea8a6=gwen%7C1491366375%7CBE9qDxctDan32mhOPuCdPwVEsfBGrZzH3tc6nU1PcjF%7C12556167bbdc99a6f5bc4531d50bdc7c664f1ccd1d2bec4f64729343f90e672d';
@@ -110,7 +110,7 @@ $wget = 'wget --random-wait -U "'.$user_agent.'" -r -l'.$depth.' --spider -D '.$
 background( $wget );
 // killall wget
 
-$extract = 'cat '.$wget_output.' | grep http | grep 2017 | awk \'{print $3}\' | egrep -iv "\.ico|\.gif|\.jpg|\.jpeg|\.png|\.woff2|\.woff|\.ttf|\.js|\.css|\.mp3|\.mp4|\.mpeg|\.pdf|\.doc|\.txt|\.tar|\.tgz|\.tar\.gz|\.gz|\.zip|\.rar" | egrep "http[s]?://"';
+$extract = 'cat '.$wget_output.' | grep http | grep 2017 | awk \'{print $3}\' | egrep -iv "\.svg|\.ico|\.gif|\.jpg|\.jpeg|\.png|\.woff2|\.woff|\.ttf|\.js|\.css|\.mp3|\.mp4|\.mpeg|\.pdf|\.doc|\.txt|\.tar|\.tgz|\.tar\.gz|\.gz|\.zip|\.rar" | egrep "http[s]?://"';
 //$wget_output = 'urls.txt';
 //$extract = 'cat '.$wget_output;
 
