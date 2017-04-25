@@ -100,7 +100,7 @@ $sleep = 1000000;
 $t_history = [];
 
 $user_agent = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0';
-$cookies = 'sucuri_cloudproxy_uuid_0e44946ca=ffc0b62fcbc378f0702b932992cec31f; sucuri_cloudproxy_uuid_f910ec451=15c03637b656e31a02497d2be6816f7d; sucuricp_tfca_6e453141ae697f9f78b18427b4c54df1=1; wordpress_test_cookie=WP+Cookie+check; wordpress_logged_in_93e97594f67a8a0ba4e55501e74ea8a6=gwen%7C1491465290%7CeaIjFRMLqp13qEKL3WoRujOyuWo6cbYWoyLNsHlgmOR%7Ca097132ed509bc470164ca6409851562f1f233140e4c4e1148e1d5cfa5f130af';
+$cookies = 'sucuricp_tfca_6e453141ae697f9f78b18427b4c54df1=1; sucuri_cloudproxy_uuid_decc91ecc=581a2fb21c00331462294d380c90080a; wordpress_test_cookie=WP+Cookie+check; wordpress_logged_in_93e97594f67a8a0ba4e55501e74ea8a6=gwen%7C1491740757%7Cu4k9AhYymV255hKEKYDKKjKIrJj5cuXAKNxPopHNl9d%7Ca7d4211cc670d9d1d46b66214dc3a88debe25a3641f200077d1ad2fbaf828eb0';
 
 
 $output_file = tempnam( '/tmp', 'xss_' );

@@ -14,6 +14,7 @@ Options:
 	-mi	min throttle (microseconds), default=0 (disable)
 	-ma	max throttle (microseconds), default=0 (disable)
 	-n	force none, useless
+	-o	disable colored output
 	-p	max process child, default=3
 	-s	test a single url
 	-t	request timeout, default=20

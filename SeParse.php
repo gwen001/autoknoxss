@@ -11,6 +11,8 @@ class SeParse
 	private $max_result = 500;
 
 	private $no_limit = false;
+	
+	private $include_documents = 0;
 
 	private $t_result = array();
 
@@ -61,8 +63,21 @@ class SeParse
 		}
 
 		$se_result = $this->seCall( $se_url );
-
-	    $r = '#<h3 class="r"><a href="([^">]*)"#';
+		//$se_result = str_replace( '>', ">\n", $se_result );
+		//var_dump($se_result);
+		
+		switch( $this->include_documents ) {
+			case 1:
+	    		$r = '#<h3 class="r"><span.*?</span><a href="([^">]*)".*?</h3>#';
+				break;
+			case 2:
+	    		$r = '#<h3 class="r">.*?<a href="([^">]*)".*?</h3>#';
+				break;
+			case 0:
+			default:
+		    	$r = '#<h3 class="r"><a href="([^">]*)"#';
+				break;
+		}
 		$m = preg_match_all( $r, $se_result, $matches );
 		//var_dump( $matches );
 		
@@ -162,6 +177,13 @@ class SeParse
 	}
 	public function getMaxResult() {
 		return $this->max_result;
+	}
+
+	public function setIncludeDocuments( $v ) {
+		$this->include_documents = (int)$v;
+	}
+	public function getIncludeDocuments() {
+		return $this->include_documents;
 	}
 
 	public function disableLimit() {

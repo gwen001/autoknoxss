@@ -28,6 +28,8 @@ class KnoxssRequest
 	public $result;
 	public $result_code;
 	
+	public $disable_color = false;
+	
 	
 	public function __construct()
 	{
@@ -59,6 +61,11 @@ class KnoxssRequest
 	public function setVerbosity( $v ) {
 		$this->verbosity = (int)$v;
 		return true;
+	}
+
+	
+	public function disableColor() {
+		$this->disable_color = true;
 	}
 
 	
@@ -190,14 +197,14 @@ class KnoxssRequest
 		
 		if( $this->result_code != 200 ) {
 			$this->_println( "Error: cannot contact KNOXSS! (".$this->result_code.")", 1, 'yellow' );
-			return 1;
+			return -1;
 		}
 		
 		$r = preg_match( "#<script>window.open\('(.*)', '', 'top=380, left=870, width=400, height=250'\);</script>#i", $this->result, $matches );
 		//var_dump( $matches );
 		if( $r ) {
 			$this->_println( "XSS found: \033[1;37m".$matches[1]."\033[0m", 2, 'red' );
-			return 0;
+			return 1;
 		}
 
 		$r = preg_match( "#No XSS found by KNOXSS#i", $this->result );
@@ -209,11 +216,11 @@ class KnoxssRequest
 		$r = preg_match( "#network issues#i", $this->result );
 		if( $r ) {
 			$this->_println( 'Error: cannot contact target!', 1, 'orange' );
-			return 1;
+			return -2;
 		}
 		
 		$this->_println( 'Error: cannot interpret result!', 1, 'light_purple' );
-		return 1;
+		return -3;
 	}
 
 	
@@ -221,13 +228,17 @@ class KnoxssRequest
 	{
 		if( $lvl >= $this->verbosity ) {
 			$txt = '['.$this->child_id.'.'.$this->request_id.'] ' . $txt;
-			Utils::_print( $txt, $color );
+			if( $this->disable_color ) {
+				echo $txt;
+			} else {
+				Utils::_print( $txt, $color );
+			}
 		}
 	}
 	private function _println( $txt, $lvl, $color='white' )
 	{
-		$this->_print( $txt, $lvl, $color );
 		if( $lvl >= $this->verbosity ) {
+			$this->_print( $txt, $lvl, $color );
 			echo "\n";
 		}
 	}

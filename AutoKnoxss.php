@@ -18,7 +18,7 @@ class AutoKnoxss
 	
 	private $n_child = 0;
 	private $max_child = 3;
-	private $sleep = 50000;
+	private $sleep = 100000;
 	private $t_process = [];
 	private $t_signal_queue = [];
 
@@ -52,10 +52,10 @@ class AutoKnoxss
 	}
 	
 	public function getTimeout() {
-		return $this->knoxss->geTimeout();
+		return $this->knoxss->getTimeout();
 	}
 	public function setTimeout( $v ) {
-		return $this->knoxss->seTimeout( (int)$v );
+		return $this->knoxss->setTimeout( (int)$v );
 	}
 
 	public function getWPnonce() {
@@ -65,7 +65,11 @@ class AutoKnoxss
 		return $this->knoxss->setWPnonce( trim($v) );
 	}
 
-	
+	public function disableColor() {
+		return $this->knoxss->disableColor();
+	}
+
+
 	public function getBurpSource() {
 		return $this->burp_source;
 	}
@@ -139,7 +143,7 @@ class AutoKnoxss
 	
 	// http://stackoverflow.com/questions/16238510/pcntl-fork-results-in-defunct-parent-process
 	// Thousand Thanks!
-	private function signal_handler( $signal, $pid=null, $status=null )
+	public function signal_handler( $signal, $pid=null, $status=null )
 	{
 		// If no pid is provided, Let's wait to figure out which child process ended
 		if( !$pid ){
@@ -252,9 +256,9 @@ class AutoKnoxss
 		}
 		echo "\n";
 		
-		//posix_setsid();
-		//declare( ticks=1 );
-		//pcntl_signal( SIGCHLD, [$this,'signal_handler'] );
+		posix_setsid();
+		declare( ticks=1 );
+		pcntl_signal( SIGCHLD, array($this,'signal_handler') );
 	}
 	
 	
@@ -281,45 +285,55 @@ class AutoKnoxss
 			        }
 				} else {
 					// child process
-					$i = $n_error = 0;
-					$child_id = $current_pointer + 1;
-	
-					foreach( $this->t_requests[$current_pointer] as $r )
-					{
-						$i++;
-						$this->knoxss->target = $r->url;
-						$this->knoxss->post = $r->post;
-						
-						ob_start();
-						//echo $child_id.'.'.$i.'. ';
-						$this->knoxss->setChildId( $child_id );
-						$this->knoxss->setRequestId( $i );
-						$this->knoxss->go();
-						$error = $this->knoxss->result();
-						$buffer = ob_get_contents();
-						ob_end_clean();
-						echo $buffer;
-						
-						if( !$error ) {
-							$n_error = 0;
-						} else {
-							$n_error++;
-						}
-						if( $this->max_error > 0 && $n_error >= $this->max_error ) {
-							echo "\n";
-							Utils::_println( '['.$child_id.'] Too many errors, contact the vendor or try later!', 'light_cyan' );
-							break;
-						}
-						
-						usleep( rand($this->min_throttle,$this->max_throttle) );
-					}
+					$this->loop( $current_pointer );	
 					exit( 0 );
 				}
 			}
-			
-			usleep( $this->sleep );
+		}
+		
+		while( $this->n_child ) {
+			// surely leave the loop please :)
+			//echo date("d/m/Y H:i:s")."\n";
+			sleep( 1 );
 		}
 		
 		echo "\n";
+	}
+	
+	
+	private function loop( $current_pointer )
+	{
+		$i = $n_error = 0;
+		$child_id = $current_pointer + 1;
+		
+		foreach( $this->t_requests[$current_pointer] as $r )
+		{
+			$i++;
+			$this->knoxss->target = $r->url;
+			$this->knoxss->post = $r->post;
+			$this->knoxss->setChildId( $child_id );
+			$this->knoxss->setRequestId( $i );
+
+			ob_start();
+			$xss = $this->knoxss->go();
+			$this->knoxss->result();
+			$buffer = ob_get_contents();
+			ob_end_clean();
+			echo $buffer;
+
+			if( $xss >= 0 ) {
+				$n_error = 0;
+			} else {
+				$n_error++;
+			}
+			if( $this->max_error > 0 && $n_error >= $this->max_error ) {
+				Utils::_println( '['.$child_id.'] Too many errors, contact the vendor or try later!', 'light_cyan' );
+				break;
+			}
+			
+			usleep( rand($this->min_throttle,$this->max_throttle) );
+		}
+		
+		return $xss;
 	}
 }

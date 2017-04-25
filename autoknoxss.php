@@ -60,6 +60,10 @@ function __autoload( $c ) {
 				$i++;
 				break;
 
+			case '-o':
+				$autoknoxss->disableColor();
+				break;
+
 			case '-p':
 				$autoknoxss->setMaxChild($_SERVER['argv'][$i + 1]);
 				$i++;
