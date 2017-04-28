@@ -12,6 +12,8 @@ class AutoKnoxss
 
 	private $burp_source;
 	private $url_source;
+	private $single_source;
+	
 	private $max_error = 0;
 	private $max_throttle = 0;
 	private $min_throttle = 0;
