@@ -1,0 +1,12 @@
+http://brutelogic.com.br/xss.php
+http://brutelogic.com.br/xss.php?b1=1
+http://brutelogic.com.br/xss.php?a=1
+http://brutelogic.com.br/xss.php?b2=1
+http://brutelogic.com.br/xss.php?c1=1
+http://brutelogic.com.br/xss.php?c4=1
+http://brutelogic.com.br/xss.php?b3=1
+http://brutelogic.com.br/xss.php?b4=1
+http://brutelogic.com.br/xss.php?c2=1
+http://brutelogic.com.br/xss.php?c3=1
+http://brutelogic.com.br/xss.php?c5=1
+http://brutelogic.com.br/xss.php?c6=1
