@@ -50,8 +50,8 @@ Example: `php allinone.php http://10degres.net c3uhce78 google`
 <br>
 <br>
 
-[![ScreenShot](https://raw.githubusercontent.com/gwen001/autoknoxss/master/example.jpg)](https://github.com/gwen001/autoknoxss)<br>
-
+<img src="https://raw.githubusercontent.com/gwen001/autoknoxss/master/example.jpg" alt="ScreenShot">
+<br><br>
 
 I don't believe in license.  
 You can do want you want with this program.  
